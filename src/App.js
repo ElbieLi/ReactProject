@@ -2,7 +2,7 @@ import React from 'react';
 
 
 const customers = [
-  {name: 'Jack Jackson', email: 'jack@abc.com', password: 'jackj'},
+  {name: 'Jack Jackson', email: 'jackj@abc.com', password: 'jackj'},
   {name: 'Katie Kates', email: 'katiek@abc.com', password: 'katiek'},
   {name: 'Glen Glenns', email: 'gleng@abc.com', password: 'gleng'}
 ]
