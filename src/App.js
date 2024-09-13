@@ -65,11 +65,13 @@ function App() {
 
   return (
     <div className="app">
+      {/* Pass props to the CustomerList component */}
       <CustomerList
       customers={customers}
       selectedCustomerId={formObject.id}
       onSelectCustomer={handleSelectCustomer}
       />
+      {/* Pass props to the CustomerAddUpdateForm component */}
       <CustomerAddUpdateForm
       formObject={formObject}
       mode={mode}
