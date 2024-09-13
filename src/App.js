@@ -74,7 +74,7 @@ export default function App() {
             <tr>
               <th>Name</th>
               <th>Email</th>
-              <th>Pass</th>
+              <th>Password</th>
             </tr>
           </thead>
           <tbody>
@@ -125,7 +125,7 @@ export default function App() {
                 </td>
             </tr>
             <tr>
-              <td className={'label'} >Pass:</td>
+              <td className={'label'} >Password:</td>
               <td>
                 <input
                 type="text"

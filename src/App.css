@@ -1,83 +1,141 @@
-h4 {
-  margin: 0px;
-  padding: 5px;
-  padding-left: 0px;
-  font-family: sans-serif;
+body{
+  font-family: 'Arial', sans-serif;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-h5 {
-  margin: 0px;
-  padding: 5px;
-  font-family: sans-serif;
-  font-weight: normal;
-  padding-bottom:0px;
-}
-table {
-  margin: 5px;
-  background-color: white;
-  font-family: monospace;
+.app {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 800px;
+  padding: 20px;
+  margin: 20px;
 }
 
-input[type='text'], input[type='email']{
-  width: 95%;
+/* Customer List Table Styling */
+.boxed{
+  margin-bottom: 20px;
 }
 
-table,
-td,
-tr {
-  border: 1.3px solid #aaa;
-  border-collapse: collapse;
-  padding: 3px;
+h4{
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 10px;
 }
 
-th {
-  background-color: lightgrey;
-  font-weight: normal;
-  border: 1px #aaa solid;
+#customer-list {
+  width: 100%;
+  border-collapse:  collapse;
+  margin-top: 10px;
 }
 
-form{
-  width: inherit;
+#customer-list th,
+#customer-list td{
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  text-align: left;
 }
 
-div#root {
-  background-color: lightgrey;
-  width: 350px;
+#customer-list th {
+  background-color: #4CAF50;
+  color: white;
+  font-size: 1rem;
 }
 
-.boxed {
-  border: 1.5px solid #aaa;
-  width: 315px;
-  margin: 10px;
-  background-color: #bababa;
-  display: inline-block;
-  border-radius: 5px;
-  padding-left: 5px;;
-  padding-right: 5px;
-  padding-top:0px;
-  padding-bottom: 5px;
+#customer-list tr {
+  background-color: #fff;
+  transition: background-color 0.2s ease-in-out;
 }
 
-.scroll{
-  height: 200px;
-  overflow: auto;
+#customer-list tr:hover {
+  background-color: #f1f1f1;
 }
 
-.small{
-  font-size:.7em;
-}
-
-.selected {
+#customer-list tr.selected {
+  background-color: #e0f7fa;
   font-weight: bold;
 }
 
-table#customer-add-update tbody tr td.label{
-  text-align: right;
+/* Form Styles */
+form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
 }
 
-#customer-list, table#customer-add-update {
-  width: inherit;
-  margin:0px;
-  border: 0px;
+label {
+  margin: 10px 0 5px;
+  font-size: 1rem;
+  color:#333
 }
 
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+  border-color: #4CAF50;
+  outline: none;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+input[type="button"] {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-right: 10px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+input[type="button"]:hover {
+  background-color: #45a049;
+}
+
+input[type="button"]:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.button-bar {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 20px;
+}
+
+/* Table form alignment */
+#customer-add-update table{
+  width: 100%;
+}
+
+#customer-add-update td {
+  padding: 10px;
+}
+
+#customer-add-update .label {
+  text-align: left;
+  padding-right: 15px;
+}
+
+/* Misc */
+.placeholder {
+  color: #aaa;
+}
