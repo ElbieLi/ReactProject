@@ -4,9 +4,9 @@ function CustomerAddUpdateForm({
     mode,
     formObject,
     handleInputChange,
-    onSaveClick,
-    onDeleteClick,
-    onCancelClick,
+    handleSave,
+    handleDelete,
+    handleCancel,
 }){
     return(
         <div className="boxed">
@@ -57,17 +57,17 @@ function CustomerAddUpdateForm({
                 <input 
                 type="button" 
                 value="Delete" 
-                onClick={onDeleteClick} 
+                onClick={handleDelete} 
                 />
                 <input 
                 type="button" 
                 value="Save" 
-                onClick={onSaveClick} 
+                onClick={handleSave} 
                 />
                 <input 
                 type="button" 
                 value="Cancel" 
-                onClick={onCancelClick} 
+                onClick={handleCancel} 
                 />
               </td>
             </tr>

@@ -75,10 +75,10 @@ function App() {
       <CustomerAddUpdateForm
       formObject={formObject}
       mode={mode}
-      onInputChange={handleInputChange}
-      onSave={handleSave}
-      onDelete={handleDelete}
-      onCancel={handleCancel}
+      handleInputChange={handleInputChange}
+      handleSave={handleSave}
+      handleDelete={handleDelete}
+      handleCancel={handleCancel}
       />
     </div>
   );
