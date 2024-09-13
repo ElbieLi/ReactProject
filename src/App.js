@@ -1,34 +1,73 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import { getAll, post, put, deleteById } from './memdb.js'
 import './App.css';
 
+// Main Application Component
+export default function App() {
+  // A blank customer object to reset the form or to initializae the form for "Add" mode
+  const blankCustomer = { id: -1, name: '', email: '', password: '' };
 
-const customers = [
-  {name: 'Jack Jackson', email: 'jackj@abc.com', password: 'jackj'},
-  {name: 'Katie Kates', email: 'katiek@abc.com', password: 'katiek'},
-  {name: 'Glen Glenns', email: 'gleng@abc.com', password: 'gleng'}
-]
+  // React State: store the list of customers and the currently selected customer/form data
+  const [customers, setCustomers] = useState([]);
+  const [formObject, setFormObject] = useState(blankCustomer);
 
-function App() {
+  // Determine if we are adding a new customer or updating an existing one based on the selected formObject's id
+  const mode = (formObject.id >= 0) ? 'Update' : 'Add';
 
-  const onDeleteClick = () => {
-    console.log('in onDeleteClick()');
-  }
+  // Fetch the customer data from the backend
+  useEffect(() => { 
+    fetchCustomers();
+   }, []);
 
-  const onSaveClick = () => {
-    console.log('in onSaveClick()');
-  }
+   // Fuction to fetch all customers from the database and update the customers state
+  const fetchCustomers = () => {
+    setCustomers(getAll());
+  };
 
-  const onCancelClick = () => {
-    console.log('in onCancelClick()');
-  }
+  // Function to handle when a customer in the list is clicked
+  const handleListClick = (item) => {
+    if(formObject.id === item.id){
+      setFormObject(blankCustomer);
+    }else{
+      setFormObject(item);
+    }
+  };  
+ 
+  // Function to handle changes in the form input fields
+  const handleInputChange = (e) => {
+    const {name, value} = e.target;
+    setFormObject((prev) => ({...prev, [name]: value }));
+  };
 
-  const handleListClick = () => {
-    console.log('in handleListClick()');
+  // Function to handle the cancel button click
+  const handleCancelClick = () => {
+    setFormObject(blankCustomer);
+  };
+
+  // Function to handle the delete button click
+  const handleDeleteClick = () => {
+    if(formObject.id >= 0){
+      deleteById(formObject.id);
+      setFormObject(blankCustomer);
+      fetchCustomers();
+    }
+  };   
+
+  // Function to handle the save button click
+  const handleSaveClick = () => {
+    if (mode === 'Add') {
+      post(formObject);
+    }else{
+      put(formObject.id, formObject);
+    }
+    setFormObject(blankCustomer);
+    fetchCustomers();
   }
 
   return (
     <div>
-      <div className="boxed">
+      {/* Customer List */}
+      <div className="boxed" >
         <h4>Customer List</h4>
         <table id="customer-list">
           <thead>
@@ -39,65 +78,88 @@ function App() {
             </tr>
           </thead>
           <tbody>
-            {customers.map((customer, index) => (
-              <tr key={index} onClick={handleListClick}>
-                <td>{customer.name}</td>
-                <td>{customer.email}</td>
-                <td>{customer.password}</td>
-              </tr>
-            ))}
+            {customers.map((item) => (
+                <tr 
+                key={item.id} 
+                className={ item.id === formObject.id ?'selected': ''}
+                onClick={()=>handleListClick(item)} 
+                >
+                  <td>{item.name}</td>
+                  <td>{item.email}</td>
+                  <td>{item.password}</td>
+                </tr>
+                ))}
           </tbody>
         </table>
-      </div>
-
-      <CustomerForm
-        onDeleteClick={onDeleteClick}
-        onSaveClick={onSaveClick}
-        onCancelClick={onCancelClick}
-      />
     </div>
-    );
-}
 
-function CustomerForm({onDeleteClick, onSaveClick, onCancelClick}){
-  return(
-    <div>
-      <div className="boxed">
-        <h4>Update</h4>
-        <form>
-          <table id="customer-add-update">
-            <tbody>
-              <tr>
-                <td className={'label'}>Name:</td>
-                <td>
-                  <input type="text" name="name" placeholder="Customer Name"/>
+    {/* Customer Add/Update Form */}
+    <div className="boxed">
+        <h4>{mode}</h4>
+      <form >
+        <table id="customer-add-update" >
+          <tbody>
+            <tr>
+              <td className={'label'} >Name:</td>
+              <td>
+                <input
+                type="text"
+                name="name"
+                value={formObject.name}
+                onChange={handleInputChange}
+                placeholder="Customer Name"
+                required 
+                />
                 </td>
-              </tr>
-              <tr>
-                <td className={'label'}>Email:</td>
-                <td>
-                  <input type="email" name="email" placeholder="name@company.com"/>
+            </tr>
+            <tr>
+              <td className={'label'} >Email:</td>
+              <td>
+                <input
+                type="email"
+                name="email"
+                value={formObject.email}
+                onChange={handleInputChange}
+                placeholder="name@company.com" 
+                />
                 </td>
-              </tr>
-              <tr>
-                <td className={'label'}>Pass:</td>
-                <td>
-                  <input type="text" name="password" placeholder="password"/>
+            </tr>
+            <tr>
+              <td className={'label'} >Pass:</td>
+              <td>
+                <input
+                type="text"
+                name="password"
+                value={formObject.password}
+                onChange={handleInputChange}
+                placeholder="password" 
+                />
                 </td>
-              </tr>
-            </tbody>
+            </tr>
+            {/* Action buttons: Delete, Save, Cancel */}
             <tr className="button-bar">
               <td colSpan="2">
-                <button type="button" onClick={onDeleteClick}>Delete</button>
-                <button type="button" onClick={onSaveClick}>Save</button>
-                <button type="button" onClick={onCancelClick}>Cancel</button>
+                <input 
+                type="button" 
+                value="Delete" 
+                onClick={handleDeleteClick} 
+                />
+                <input 
+                type="button" 
+                value="Save" 
+                onClick={handleSaveClick} 
+                />
+                <input 
+                type="button" 
+                value="Cancel" 
+                onClick={handleCancelClick} 
+                />
               </td>
             </tr>
-          </table>
-        </form>
-      </div>
+          </tbody>
+        </table>
+      </form>
     </div>
+  </div>
   );
 }
-
-export default App;
