@@ -1,9 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import { getAll, post, put, deleteById } from './memdb.js'
+import CustomerList from './CustomerList.js';
+import CustomerAddUpdateForm from './CustomerAddUpdateForm.js';
 import './App.css';
 
 // Main Application Component
-export default function App() {
+function App() {
+  
   // A blank customer object to reset the form or to initializae the form for "Add" mode
   const blankCustomer = { id: -1, name: '', email: '', password: '' };
 
@@ -25,12 +28,8 @@ export default function App() {
   };
 
   // Function to handle when a customer in the list is clicked
-  const handleListClick = (item) => {
-    if(formObject.id === item.id){
-      setFormObject(blankCustomer);
-    }else{
-      setFormObject(item);
-    }
+  const handleSelectCustomer = (customer) => {
+    setFormObject(customer.id === formObject.id ? blankCustomer : customer);
   };  
  
   // Function to handle changes in the form input fields
@@ -40,12 +39,12 @@ export default function App() {
   };
 
   // Function to handle the cancel button click
-  const handleCancelClick = () => {
+  const handleCancel = () => {
     setFormObject(blankCustomer);
   };
 
   // Function to handle the delete button click
-  const handleDeleteClick = () => {
+  const handleDelete = () => {
     if(formObject.id >= 0){
       deleteById(formObject.id);
       setFormObject(blankCustomer);
@@ -54,7 +53,7 @@ export default function App() {
   };   
 
   // Function to handle the save button click
-  const handleSaveClick = () => {
+  const handleSave = () => {
     if (mode === 'Add') {
       post(formObject);
     }else{
@@ -65,101 +64,22 @@ export default function App() {
   }
 
   return (
-    <div>
-      {/* Customer List */}
-      <div className="boxed" >
-        <h4>Customer List</h4>
-        <table id="customer-list">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Password</th>
-            </tr>
-          </thead>
-          <tbody>
-            {customers.map((item) => (
-                <tr 
-                key={item.id} 
-                className={ item.id === formObject.id ?'selected': ''}
-                onClick={()=>handleListClick(item)} 
-                >
-                  <td>{item.name}</td>
-                  <td>{item.email}</td>
-                  <td>{item.password}</td>
-                </tr>
-                ))}
-          </tbody>
-        </table>
+    <div className="app">
+      <CustomerList
+      customers={customers}
+      selectedCustomerId={formObject.id}
+      onSelectCustomer={handleSelectCustomer}
+      />
+      <CustomerAddUpdateForm
+      formObject={formObject}
+      mode={mode}
+      onInputChange={handleInputChange}
+      onSave={handleSave}
+      onDelete={handleDelete}
+      onCancel={handleCancel}
+      />
     </div>
-
-    {/* Customer Add/Update Form */}
-    <div className="boxed">
-        <h4>{mode}</h4>
-      <form >
-        <table id="customer-add-update" >
-          <tbody>
-            <tr>
-              <td className={'label'} >Name:</td>
-              <td>
-                <input
-                type="text"
-                name="name"
-                value={formObject.name}
-                onChange={handleInputChange}
-                placeholder="Customer Name"
-                required 
-                />
-                </td>
-            </tr>
-            <tr>
-              <td className={'label'} >Email:</td>
-              <td>
-                <input
-                type="email"
-                name="email"
-                value={formObject.email}
-                onChange={handleInputChange}
-                placeholder="name@company.com" 
-                />
-                </td>
-            </tr>
-            <tr>
-              <td className={'label'} >Password:</td>
-              <td>
-                <input
-                type="text"
-                name="password"
-                value={formObject.password}
-                onChange={handleInputChange}
-                placeholder="password" 
-                />
-                </td>
-            </tr>
-            {/* Action buttons: Delete, Save, Cancel */}
-            <tr className="button-bar">
-              <td colSpan="2">
-                <input 
-                type="button" 
-                value="Delete" 
-                onClick={handleDeleteClick} 
-                />
-                <input 
-                type="button" 
-                value="Save" 
-                onClick={handleSaveClick} 
-                />
-                <input 
-                type="button" 
-                value="Cancel" 
-                onClick={handleCancelClick} 
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </form>
-    </div>
-  </div>
   );
 }
+
+export default App;
